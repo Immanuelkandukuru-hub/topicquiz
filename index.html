@@ -1,0 +1,2865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Topic Quiz – Test Your Knowledge</title>
+  <style>
+    /* ==========================================================================
+       1. CSS VARIABLES & DESIGN SYSTEM
+       ========================================================================== */
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #e0e7ff;
+      --primary-dark: #3730a3;
+      --accent: #8b5cf6;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      
+      --bg-body: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --border-color: #e2e8f0;
+      --border-hover: #cbd5e1;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 12px 24px -4px rgba(79, 70, 229, 0.12), 0 8px 16px -6px rgba(0, 0, 0, 0.06);
+
+      --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --transition: all 0.25s ease;
+    }
+
+    /* ==========================================================================
+       2. BASE & RESET STYLES
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.06) 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.06) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* ==========================================================================
+       3. HEADER & NAVIGATION
+       ========================================================================== */
+    header {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .brand-icon {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-dark), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge-offline {
+      background-color: var(--success-light);
+      color: #065f46;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--success);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* ==========================================================================
+       4. CONTAINER & SCREEN SYSTEM
+       ========================================================================== */
+    main {
+      flex: 1;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .screen {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==========================================================================
+       5. WELCOME & TOPIC SELECTION SCREEN
+       ========================================================================== */
+    .hero-banner {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-banner h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    .hero-banner p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    /* Section Headings */
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Difficulty Selector Bar */
+    .difficulty-selector {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 0.5rem;
+      border-radius: var(--radius-lg);
+      display: inline-flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+      flex-wrap: wrap;
+    }
+
+    .diff-btn {
+      border: none;
+      background: transparent;
+      padding: 0.6rem 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .diff-btn:hover {
+      color: var(--text-main);
+      background-color: var(--bg-body);
+    }
+
+    .diff-btn.active {
+      background-color: var(--primary);
+      color: white;
+      box-shadow: 0 4px 8px rgba(79, 70, 229, 0.25);
+    }
+
+    /* Topic Cards Grid */
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .topic-card {
+      background-color: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+      position: relative;
+      text-align: left;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .topic-card.selected {
+      border-color: var(--primary);
+      background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%);
+      box-shadow: 0 0 0 2px var(--primary-light), var(--shadow-md);
+    }
+
+    .topic-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .topic-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .topic-card-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    .topic-card-meta {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Start Button Area */
+    .action-bar {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .btn-large {
+      padding: 0.95rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* ==========================================================================
+       6. BUTTONS & SHARED CONTROLS
+       ========================================================================= */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.7rem 1.4rem;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background-color: var(--card-bg);
+      color: var(--text-main);
+      border-color: var(--border-color);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: #f1f5f9;
+      border-color: var(--border-hover);
+    }
+
+    .btn-outline-danger {
+      background: transparent;
+      color: var(--danger);
+      border-color: #fecaca;
+    }
+
+    .btn-outline-danger:hover:not(:disabled) {
+      background: var(--danger-light);
+    }
+
+    /* ==========================================================================
+       7. QUIZ INTERFACE SCREEN
+       ========================================================================== */
+    .quiz-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .quiz-meta-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .tag-topic {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: var(--radius-full);
+    }
+
+    .tag-diff {
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: var(--radius-full);
+      text-transform: capitalize;
+    }
+
+    .tag-diff.easy { background: var(--success-light); color: #065f46; }
+    .tag-diff.medium { background: var(--warning-light); color: #92400e; }
+    .tag-diff.hard { background: var(--danger-light); color: #991b1b; }
+
+    .question-counter {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      margin-bottom: 2rem;
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 8px;
+      background-color: #e2e8f0;
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      width: 0%;
+      border-radius: var(--radius-full);
+      transition: width 0.35s ease;
+    }
+
+    /* Question Box */
+    .question-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 1.5rem;
+      line-height: 1.45;
+    }
+
+    /* Options List */
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      text-align: left;
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      font-size: 1rem;
+      color: var(--text-main);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .option-btn:hover:not(.disabled) {
+      border-color: var(--primary);
+      background-color: #f8fafc;
+      transform: translateX(4px);
+    }
+
+    .option-indicator {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      flex-shrink: 0;
+      transition: var(--transition);
+    }
+
+    .option-text {
+      flex: 1;
+    }
+
+    .option-status-icon {
+      margin-left: 0.5rem;
+      font-size: 1.2rem;
+      display: none;
+    }
+
+    /* Option States */
+    .option-btn.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .option-btn.selected .option-indicator {
+      background: var(--primary);
+      color: white;
+    }
+
+    .option-btn.correct {
+      border-color: var(--success) !important;
+      background-color: var(--success-light) !important;
+      color: #065f46 !important;
+    }
+
+    .option-btn.correct .option-indicator {
+      background-color: var(--success) !important;
+      color: white !important;
+    }
+
+    .option-btn.correct .option-status-icon {
+      display: inline-block;
+      color: var(--success);
+    }
+
+    .option-btn.incorrect {
+      border-color: var(--danger) !important;
+      background-color: var(--danger-light) !important;
+      color: #991b1b !important;
+    }
+
+    .option-btn.incorrect .option-indicator {
+      background-color: var(--danger) !important;
+      color: white !important;
+    }
+
+    .option-btn.incorrect .option-status-icon {
+      display: inline-block;
+      color: var(--danger);
+    }
+
+    .option-btn.disabled {
+      cursor: default;
+    }
+
+    /* Explanation Box */
+    .explanation-box {
+      display: none;
+      background: #f8fafc;
+      border-left: 4px solid var(--primary);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .explanation-box.show {
+      display: block;
+    }
+
+    .explanation-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .explanation-text {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* Quiz Footer Navigation */
+    .quiz-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .quiz-nav-group {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    /* ==========================================================================
+       8. RESULTS SCREEN
+       ========================================================================== */
+    .results-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 2rem;
+    }
+
+    .results-badge-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+      animation: bounce 1s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
+    }
+
+    .results-card h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .results-message {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      max-width: 550px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Score Circle / Summary Grid */
+    .score-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 1rem;
+      max-width: 650px;
+      margin: 0 auto 2rem;
+    }
+
+    .stat-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1rem;
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-card.correct .stat-value { color: var(--success); }
+    .stat-card.incorrect .stat-value { color: var(--danger); }
+    .stat-card.score .stat-value { color: var(--primary); }
+
+    /* Results Action Buttons */
+    .results-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    /* Detailed Review Accordion */
+    .review-section {
+      text-align: left;
+      margin-top: 2rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1.5rem;
+    }
+
+    .review-toggle-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0 auto 1.5rem;
+    }
+
+    .review-toggle-btn:hover {
+      text-decoration: underline;
+    }
+
+    .review-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .review-item {
+      background: #f8fafc;
+      border-left: 4px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+    }
+
+    .review-item.was-correct {
+      border-left-color: var(--success);
+    }
+
+    .review-item.was-incorrect {
+      border-left-color: var(--danger);
+    }
+
+    .review-q-text {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .review-ans-row {
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .review-explanation {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    /* ==========================================================================
+       9. MODAL & DIALOG
+       ========================================================================== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal-box {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      max-width: 420px;
+      width: 100%;
+      padding: 2rem;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+
+    .modal-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-message {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+
+    /* ==========================================================================
+       10. FOOTER
+       ========================================================================== */
+    footer {
+      background-color: var(--card-bg);
+      border-top: 1px solid var(--border-color);
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    /* ==========================================================================
+       11. RESPONSIVE MEDIA QUERIES
+       ========================================================================== */
+    @media (max-width: 640px) {
+      .hero-banner h1 {
+        font-size: 1.75rem;
+      }
+
+      .topics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .difficulty-selector {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .diff-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 0.5rem;
+      }
+
+      .quiz-card {
+        padding: 1.25rem;
+      }
+
+      .quiz-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .quiz-footer {
+        flex-direction: column-reverse;
+        gap: 0.75rem;
+      }
+
+      .quiz-footer .btn,
+      .quiz-nav-group {
+        width: 100%;
+      }
+
+      .quiz-nav-group .btn {
+        flex: 1;
+      }
+
+      .score-summary-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .results-actions {
+        flex-direction: column;
+      }
+
+      .results-actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       APPLICATION HEADER
+       ========================================================================== -->
+  <header>
+    <div class="header-container">
+      <div class="brand" id="brandLogo" title="Back to Topic Selection">
+        <div class="brand-icon">TQ</div>
+        <div class="brand-title">Topic Quiz</div>
+      </div>
+      <div class="badge-offline">
+        <span class="badge-dot"></span>
+        <span>100% Offline & Free</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== -->
+  <main>
+    
+    <!-- ------------------------------------------------------------------------
+         SCREEN 1: WELCOME & TOPIC SELECTION
+         ------------------------------------------------------------------------ -->
+    <section id="screenWelcome" class="screen active">
+      <div class="hero-banner">
+        <h1>Welcome to Topic Quiz!</h1>
+        <p>Pick a subject and choose your difficulty level to test your skills and boost your knowledge.</p>
+      </div>
+
+      <!-- Difficulty Level Selection -->
+      <div class="section-title">
+        <span>Step 1: Choose Difficulty</span>
+      </div>
+      <div class="difficulty-selector" id="difficultySelector">
+        <button type="button" class="diff-btn active" data-difficulty="easy">
+          <span>🌱</span> Easy
+        </button>
+        <button type="button" class="diff-btn" data-difficulty="medium">
+          <span>⚡</span> Medium
+        </button>
+        <button type="button" class="diff-btn" data-difficulty="hard">
+          <span>🔥</span> Hard
+        </button>
+      </div>
+
+      <!-- Topic Cards Grid -->
+      <div class="section-title">
+        <span>Step 2: Choose a Topic</span>
+      </div>
+      <div class="topics-grid" id="topicsGrid">
+        <!-- Topic cards will be dynamically injected by JavaScript -->
+      </div>
+
+      <!-- Start Quiz Action Button -->
+      <div class="action-bar">
+        <button id="btnStartQuiz" class="btn btn-primary btn-large" disabled>
+          Select a Topic to Start
+        </button>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------------
+         SCREEN 2: ACTIVE QUIZ VIEW
+         ------------------------------------------------------------------------ -->
+    <section id="screenQuiz" class="screen">
+      <div class="quiz-card">
+        
+        <!-- Quiz Header Info -->
+        <div class="quiz-header">
+          <div class="quiz-meta-left">
+            <button id="btnBackToTopics" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+              ← Back to Topics
+            </button>
+            <span id="quizTopicTag" class="tag-topic">HTML</span>
+            <span id="quizDiffTag" class="tag-diff easy">Easy</span>
+          </div>
+          <div class="question-counter" id="questionCounter">
+            Question 1 of 5
+          </div>
+        </div>
+
+        <!-- Animated Progress Bar -->
+        <div class="progress-container">
+          <div class="progress-bar-track">
+            <div id="progressBarFill" class="progress-bar-fill"></div>
+          </div>
+        </div>
+
+        <!-- Current Question Title -->
+        <h2 id="questionTitle" class="question-title">
+          Loading question...
+        </h2>
+
+        <!-- Answer Options List (A, B, C, D) -->
+        <div id="optionsContainer" class="options-grid">
+          <!-- Option buttons injected dynamically -->
+        </div>
+
+        <!-- Answer Explanation Box -->
+        <div id="explanationBox" class="explanation-box">
+          <div class="explanation-title">
+            <span>💡 Explanation</span>
+          </div>
+          <div id="explanationText" class="explanation-text">
+            Explanation details will be displayed here.
+          </div>
+        </div>
+
+        <!-- Quiz Navigation Footer -->
+        <div class="quiz-footer">
+          <button id="btnRestartQuiz" class="btn btn-outline-danger">
+            Restart Quiz
+          </button>
+          
+          <div class="quiz-nav-group">
+            <button id="btnPrevQuestion" class="btn btn-secondary" disabled>
+              ← Previous
+            </button>
+            <button id="btnNextQuestion" class="btn btn-primary" disabled>
+              Next Question →
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------------
+         SCREEN 3: RESULTS & SCORE VIEW
+         ------------------------------------------------------------------------ -->
+    <section id="screenResults" class="screen">
+      <div class="results-card">
+        
+        <div id="resultsBadgeIcon" class="results-badge-icon">🎉</div>
+        <h2 id="resultsHeading">Quiz Completed!</h2>
+        <p id="resultsMessage" class="results-message">
+          Great effort! Here is how you performed on this quiz.
+        </p>
+
+        <!-- Stats Breakdown Cards -->
+        <div class="score-summary-grid">
+          <div class="stat-card score">
+            <div id="statScore" class="stat-value">0/0</div>
+            <div class="stat-label">Total Score</div>
+          </div>
+          <div class="stat-card">
+            <div id="statPercentage" class="stat-value">0%</div>
+            <div class="stat-label">Accuracy</div>
+          </div>
+          <div class="stat-card correct">
+            <div id="statCorrect" class="stat-value">0</div>
+            <div class="stat-label">Correct</div>
+          </div>
+          <div class="stat-card incorrect">
+            <div id="statIncorrect" class="stat-value">0</div>
+            <div class="stat-label">Incorrect</div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="results-actions">
+          <button id="btnRetryQuiz" class="btn btn-primary">
+            🔄 Retry Quiz
+          </button>
+          <button id="btnChooseAnotherTopic" class="btn btn-secondary">
+            📚 Choose Another Topic
+          </button>
+        </div>
+
+        <!-- Detailed Review Section -->
+        <div class="review-section">
+          <button id="btnToggleReview" class="review-toggle-btn">
+            <span>📋 Show Detailed Question Review</span>
+          </button>
+          
+          <div id="reviewContainer" class="review-list" style="display: none;">
+            <!-- Review items dynamically injected -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       CONFIRMATION MODAL DIALOG
+       ========================================================================== -->
+  <div id="confirmModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-icon">⚠️</div>
+      <h3 id="modalTitle" class="modal-title">Leave Current Quiz?</h3>
+      <p id="modalMessage" class="modal-message">
+        Your current quiz progress and answers will be lost if you leave now.
+      </p>
+      <div class="modal-actions">
+        <button id="modalBtnCancel" class="btn btn-secondary">
+          Stay on Quiz
+        </button>
+        <button id="modalBtnConfirm" class="btn btn-outline-danger">
+          Yes, Leave
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       PAGE FOOTER
+       ========================================================================== -->
+  <footer>
+    <p>Topic Quiz &copy; 2026 – Built for students and coding beginners. Works 100% offline.</p>
+  </footer>
+
+  <!-- ==========================================================================
+       JAVASCRIPT LOGIC
+       ========================================================================== -->
+  <script>
+    /* ==========================================================================
+       1. TOPICS CONFIGURATION
+       ========================================================================== */
+    const TOPICS = [
+      {
+        id: "html",
+        title: "HTML",
+        icon: "🌐",
+        bgColor: "#fee2e2",
+        description: "Tags, semantic structure, links, attributes, and page layouts."
+      },
+      {
+        id: "css",
+        title: "CSS",
+        icon: "🎨",
+        bgColor: "#e0e7ff",
+        description: "Styling, selectors, flexbox, grid, box model, and animations."
+      },
+      {
+        id: "javascript",
+        title: "JavaScript",
+        icon: "⚡",
+        bgColor: "#fef3c7",
+        description: "Variables, functions, arrays, DOM events, and logic control."
+      },
+      {
+        id: "general-knowledge",
+        title: "General Knowledge",
+        icon: "🌍",
+        bgColor: "#e0f2fe",
+        description: "World facts, geography, discoveries, and famous trivia."
+      },
+      {
+        id: "science",
+        title: "Science",
+        icon: "🔬",
+        bgColor: "#dcfce7",
+        description: "Physics, biology, chemistry, space, and nature principles."
+      },
+      {
+        id: "computer-basics",
+        title: "Computer Basics",
+        icon: "💻",
+        bgColor: "#f3e8ff",
+        description: "Hardware, operating systems, memory, CPUs, and shortcuts."
+      },
+      {
+        id: "college-projects",
+        title: "College Projects",
+        icon: "🚀",
+        bgColor: "#ffedd5",
+        description: "Git, documentation, wireframes, MVP development, and agile."
+      },
+      {
+        id: "hackathons",
+        title: "Hackathons",
+        icon: "🏆",
+        bgColor: "#fce7f3",
+        description: "Pitching, rapid prototyping, teamwork, and project demos."
+      }
+    ];
+
+    /* ==========================================================================
+       2. PREDEFINED QUESTION BANK
+       Organized by Topic -> Difficulty (Easy, Medium, Hard) -> 5 Questions Each
+       Total: 8 topics * 3 difficulties * 5 questions = 120 questions
+       ========================================================================== */
+    const QUESTION_BANK = {
+      // ------------------------------------------------------------------------
+      // HTML
+      // ------------------------------------------------------------------------
+      "html": {
+        "easy": [
+          {
+            question: "What does HTML stand for?",
+            options: [
+              "HyperText Markup Language",
+              "HighText Machine Language",
+              "HyperTool Multi Language",
+              "Home Tool Markup Language"
+            ],
+            correct: 0,
+            explanation: "HTML stands for HyperText Markup Language, the standard markup language used to build websites."
+          },
+          {
+            question: "Which HTML tag is used to define the largest heading on a page?",
+            options: ["<heading>", "<h6>", "<h1>", "<head>"],
+            correct: 2,
+            explanation: "The <h1> tag represents the highest level and largest standard heading in HTML."
+          },
+          {
+            question: "Which attribute is used to specify the destination URL of a link in the <a> tag?",
+            options: ["src", "href", "link", "target"],
+            correct: 1,
+            explanation: "The 'href' (hypertext reference) attribute specifies the web address the hyperlink points to."
+          },
+          {
+            question: "Which tag is used to create a paragraph in HTML?",
+            options: ["<para>", "<p>", "<text>", "<pg>"],
+            correct: 1,
+            explanation: "The <p> tag defines a paragraph of text in HTML."
+          },
+          {
+            question: "Which tag is used to display an image on a webpage?",
+            options: ["<image>", "<pic>", "<img>", "<photo>"],
+            correct: 2,
+            explanation: "The <img> tag embeds an image in an HTML document and requires a 'src' attribute."
+          }
+        ],
+        "medium": [
+          {
+            question: "Which HTML5 semantic element is best suited for independent, reusable content like a blog post or news item?",
+            options: ["<div>", "<article>", "<aside>", "<section>"],
+            correct: 1,
+            explanation: "The <article> element is specifically meant for self-contained compositions like news articles or forum posts."
+          },
+          {
+            question: "What is the purpose of the 'alt' attribute on an <img> tag?",
+            options: [
+              "Changes the alternate image resolution",
+              "Provides alternative text for screen readers and when images fail to load",
+              "Controls the alignment of the image",
+              "Adds a hover tooltip"
+            ],
+            correct: 1,
+            explanation: "The 'alt' attribute provides accessible alternative text for screen readers and displays when the image cannot load."
+          },
+          {
+            question: "Which HTML element is used to group inline-elements without adding structural semantic meaning?",
+            options: ["<div>", "<p>", "<span>", "<section>"],
+            correct: 2,
+            explanation: "<span> is an inline container used to style or script a specific section of inline text."
+          },
+          {
+            question: "Which input type creates a field where user input is masked with bullets or dots?",
+            options: ["type=\"text\"", "type=\"hidden\"", "type=\"password\"", "type=\"mask\""],
+            correct: 2,
+            explanation: "Using <input type=\"password\"> masks the characters entered to protect sensitive information."
+          },
+          {
+            question: "What does the declaration '<!DOCTYPE html>' tell the web browser?",
+            options: [
+              "It links an external CSS stylesheet",
+              "It informs the browser that the document is written in HTML5",
+              "It defines the default language of the webpage",
+              "It imports the JavaScript runtime engine"
+            ],
+            correct: 1,
+            explanation: "<!DOCTYPE html> is the document type declaration that tells the browser to render the page in standard HTML5 mode."
+          }
+        ],
+        "hard": [
+          {
+            question: "What is the difference between the 'async' and 'defer' attributes on a <script> tag?",
+            options: [
+              "'async' executes after HTML parsing completes, while 'defer' executes immediately",
+              "'async' executes as soon as downloaded (interrupting parsing), while 'defer' waits until HTML parsing finishes",
+              "'async' is for external scripts and 'defer' is only for inline scripts",
+              "There is no difference; they are exact aliases"
+            ],
+            correct: 1,
+            explanation: "'async' downloads in parallel and runs immediately when ready (can pause parsing). 'defer' preserves script order and runs after DOM parsing finishes."
+          },
+          {
+            question: "Which HTML5 element provides an autocomplete list of predefined options for an <input> element?",
+            options: ["<select>", "<datalist>", "<optionlist>", "<dropdown>"],
+            correct: 1,
+            explanation: "The <datalist> tag specifies a list of pre-defined options for an <input> element with autocomplete functionality."
+          },
+          {
+            question: "What is the primary function of '<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">'?",
+            options: [
+              "It sets the browser tab title",
+              "It enables search engines to index the website faster",
+              "It controls viewport dimensions and scaling for responsive mobile rendering",
+              "It enables dark mode automatically"
+            ],
+            correct: 2,
+            explanation: "The viewport meta tag ensures the webpage renders at the device width and scale properly across mobile and desktop screens."
+          },
+          {
+            question: "Which element is used to embed client-side graphics rendered via JavaScript code?",
+            options: ["<svg>", "<canvas>", "<graphic>", "<render>"],
+            correct: 1,
+            explanation: "The <canvas> element provides a drawable region in HTML where 2D shapes and graphics are rendered dynamically using JavaScript."
+          },
+          {
+            question: "What happens if you open an HTML page containing sessionStorage data in two separate browser tabs?",
+            options: [
+              "Both tabs share the exact same sessionStorage data in real time",
+              "Each tab has its own isolated sessionStorage copy that is not shared",
+              "The second tab overwrites the first tab immediately",
+              "sessionStorage requires a backend server to work across tabs"
+            ],
+            correct: 1,
+            explanation: "sessionStorage is scoped to the specific browser tab/window session; each tab has isolated storage even for the same origin."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------------------------
+      // CSS
+      // ------------------------------------------------------------------------
+      "css": {
+        "easy": [
+          {
+            question: "What does CSS stand for?",
+            options: [
+              "Cascading Style Sheets",
+              "Creative Style System",
+              "Computer Sheet Styling",
+              "Colorful Style Sheets"
+            ],
+            correct: 0,
+            explanation: "CSS stands for Cascading Style Sheets, used to style HTML documents."
+          },
+          {
+            question: "Which CSS property is used to change the background color of an element?",
+            options: ["color", "background-color", "bg-color", "surface-color"],
+            correct: 1,
+            explanation: "'background-color' sets the background color of an element, while 'color' sets text color."
+          },
+          {
+            question: "Which character is used to select elements by class name in CSS?",
+            options: ["# (hash)", ". (dot)", "* (asterisk)", "@ (at)"],
+            correct: 1,
+            explanation: "The period/dot (.) symbol is the class selector prefix in CSS (e.g., .card)."
+          },
+          {
+            question: "Which character is used to select an element by its ID attribute in CSS?",
+            options: [". (dot)", "# (hash)", "& (ampersand)", "$ (dollar)"],
+            correct: 1,
+            explanation: "The hash (#) symbol is the ID selector prefix in CSS (e.g., #header)."
+          },
+          {
+            question: "Which property is used to change the font size of text?",
+            options: ["text-style", "font-weight", "font-size", "text-size"],
+            correct: 2,
+            explanation: "'font-size' is the standard CSS property for setting the size of the font."
+          }
+        ],
+        "medium": [
+          {
+            question: "What are the four components of the CSS Box Model, from the inside out?",
+            options: [
+              "Content, Padding, Border, Margin",
+              "Content, Border, Padding, Margin",
+              "Margin, Border, Padding, Content",
+              "Padding, Content, Margin, Border"
+            ],
+            correct: 0,
+            explanation: "From inside out, the CSS Box Model consists of: Content -> Padding -> Border -> Margin."
+          },
+          {
+            question: "In CSS Flexbox, which property aligns items along the main axis?",
+            options: ["align-items", "justify-content", "align-content", "flex-direction"],
+            correct: 1,
+            explanation: "'justify-content' aligns flex items along the main axis (horizontal by default)."
+          },
+          {
+            question: "What does 'position: absolute;' do in CSS?",
+            options: [
+              "Positions the element relative to the user viewport only",
+              "Positions the element relative to its nearest positioned ancestor",
+              "Locks the element so it cannot be scrolled",
+              "Centers the element on the webpage automatically"
+            ],
+            correct: 1,
+            explanation: "An absolute element is removed from normal document flow and positioned relative to its nearest ancestor with a position other than static."
+          },
+          {
+            question: "Which CSS pseudo-class styles an element when the user points their mouse cursor over it?",
+            options: [":active", ":focus", ":hover", ":visited"],
+            correct: 2,
+            explanation: "The ':hover' pseudo-class applies styles when the user hovers over an element with a pointer device."
+          },
+          {
+            question: "What is the purpose of 'box-sizing: border-box;' in modern CSS?",
+            options: [
+              "It removes all borders from elements",
+              "It includes padding and border within the element's total declared width and height",
+              "It turns the element into a 3D box with shadow",
+              "It creates round corners on borders"
+            ],
+            correct: 1,
+            explanation: "'border-box' calculates total width and height inclusive of padding and border, making responsive sizing much easier."
+          }
+        ],
+        "hard": [
+          {
+            question: "What is the main difference between 'rem' and 'em' units in CSS?",
+            options: [
+              "'rem' is relative to the root (<html>) font size, while 'em' is relative to the parent element's font size",
+              "'rem' is for mobile devices while 'em' is for desktop monitors",
+              "'rem' stands for real millimeters, 'em' stands for exact measurement",
+              "There is no difference; both reference the browser window width"
+            ],
+            correct: 0,
+            explanation: "'rem' refers to root-em (scaled relative to <html> font size), avoiding cascading compounding issues that occur with nested 'em' units."
+          },
+          {
+            question: "How do you declare and use a native CSS custom property (variable)?",
+            options: [
+              "Declare: $main-color: blue; Use: color: $main-color;",
+              "Declare: --main-color: blue; Use: color: var(--main-color);",
+              "Declare: @main-color = blue; Use: color: @main-color;",
+              "Declare: var main-color = blue; Use: color: #main-color;"
+            ],
+            correct: 1,
+            explanation: "CSS variables are declared using the double dash prefix (e.g., --main-color: #333;) and accessed using the var() function."
+          },
+          {
+            question: "Which selector has the highest specificity in CSS?",
+            options: [
+              "An element selector (e.g., div)",
+              "A class selector (e.g., .nav-link)",
+              "An ID selector (e.g., #main-nav)",
+              "A universal selector (e.g., *)"
+            ],
+            correct: 2,
+            explanation: "In CSS specificity, ID selectors (weight 0,1,0,0) override class selectors (0,0,1,0) and element selectors (0,0,0,1)."
+          },
+          {
+            question: "In CSS Grid, what does 'repeat(auto-fit, minmax(200px, 1fr))' do?",
+            options: [
+              "Fixes the grid to exactly 200 columns",
+              "Creates a responsive grid where columns automatically fit the container and expand equally above 200px",
+              "Forces all grid cells to maintain a 1:1 square aspect ratio",
+              "Reduces all images inside the grid to 200 pixels"
+            ],
+            correct: 1,
+            explanation: "This pattern creates fluid, responsive column layouts without media queries by wrapping columns automatically when container width changes."
+          },
+          {
+            question: "What does the CSS property 'z-index' control?",
+            options: [
+              "The horizontal left-to-right alignment",
+              "The vertical stacking order of positioned overlapping elements",
+              "The zoom level of the browser window",
+              "The 3D tilt angle of text"
+            ],
+            correct: 1,
+            explanation: "'z-index' specifies the stack order of positioned elements along the z-axis (depth perpendicular to the screen)."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------------------------
+      // JAVASCRIPT
+      // ------------------------------------------------------------------------
+      "javascript": {
+        "easy": [
+          {
+            question: "Which keyword is used to declare a variable whose value cannot be reassigned in JavaScript?",
+            options: ["var", "let", "const", "static"],
+            correct: 2,
+            explanation: "'const' creates a block-scoped variable that cannot be reassigned a new value."
+          },
+          {
+            question: "How do you print output to the browser developer console?",
+            options: ["print()", "console.log()", "echo()", "system.out()"],
+            correct: 1,
+            explanation: "console.log() is the standard method used to inspect output in the browser's developer tools console."
+          },
+          {
+            question: "What is the index number of the first item in a JavaScript array?",
+            options: ["0", "1", "-1", "first"],
+            correct: 0,
+            explanation: "JavaScript arrays are zero-indexed, meaning the first element is at index 0."
+          },
+          {
+            question: "How do you write a single-line comment in JavaScript?",
+            options: ["<!-- comment -->", "/* comment */", "// comment", "# comment"],
+            correct: 2,
+            explanation: "Two forward slashes (//) start a single-line comment in JavaScript."
+          },
+          {
+            question: "Which of the following is a boolean data type value in JavaScript?",
+            options: ["\"yes\"", "true", "1", "null"],
+            correct: 1,
+            explanation: "The boolean type in JavaScript has only two literal values: true and false."
+          }
+        ],
+        "medium": [
+          {
+            question: "What is the difference between '==' and '===' in JavaScript?",
+            options: [
+              "'==' checks both value and type, while '===' only checks value",
+              "'==' performs type coercion before comparing, while '===' checks both value and type strictly",
+              "'===' is an older syntax deprecated in ES6",
+              "There is no functional difference"
+            ],
+            correct: 1,
+            explanation: "'==' performs loose equality (converts types if different), whereas '===' is strict equality (values must share the same type)."
+          },
+          {
+            question: "Which built-in array method adds one or more elements to the end of an array?",
+            options: [".pop()", ".shift()", ".push()", ".unshift()"],
+            correct: 2,
+            explanation: "array.push() appends items to the end of an array and returns the new length."
+          },
+          {
+            question: "What does the 'typeof null' expression return in JavaScript?",
+            options: ["\"null\"", "\"undefined\"", "\"object\"", "\"boolean\""],
+            correct: 2,
+            explanation: "'typeof null' returning 'object' is a well-known legacy quirk in JavaScript that dates back to its original implementation."
+          },
+          {
+            question: "Which method attaches an event handler function to a DOM element?",
+            options: ["element.attach()", "element.addEventListener()", "element.bindEvent()", "element.listen()"],
+            correct: 1,
+            explanation: "addEventListener() is the recommended method to attach event listeners (like 'click', 'keydown') to DOM nodes."
+          },
+          {
+            question: "What does the array method '.map()' return?",
+            options: [
+              "A single combined value",
+              "A new array containing the results of calling a provided function on every element",
+              "The original array modified in-place",
+              "A boolean indicating if all items match"
+            ],
+            correct: 1,
+            explanation: "The .map() method creates a brand new array populated with the results of calling the callback function on each element."
+          }
+        ],
+        "hard": [
+          {
+            question: "What is a closure in JavaScript?",
+            options: [
+              "A function combined with references to its surrounding lexical environment",
+              "A function that automatically terminates after 5 seconds",
+              "The syntax used to close script tags in HTML",
+              "A private class keyword introduced in ES2022"
+            ],
+            correct: 0,
+            explanation: "A closure gives an inner function access to an outer function's scope even after the outer function has finished executing."
+          },
+          {
+            question: "What are the three possible states of a JavaScript Promise?",
+            options: [
+              "Waiting, Processing, Finished",
+              "Pending, Fulfilled, Rejected",
+              "Init, Active, Inactive",
+              "Start, Middle, End"
+            ],
+            correct: 1,
+            explanation: "A Promise is always in one of three states: pending (in progress), fulfilled (succeeded), or rejected (failed)."
+          },
+          {
+            question: "What does 'JSON.stringify()' do in JavaScript?",
+            options: [
+              "Parses a JSON string into a JavaScript object",
+              "Converts a JavaScript object or value into a JSON formatted string",
+              "Validates if a string is syntactically valid JSON",
+              "Encodes a string for URL transmission"
+            ],
+            correct: 1,
+            explanation: "JSON.stringify() converts a JavaScript object or array into a valid JSON string representation."
+          },
+          {
+            question: "What is event bubbling in the browser DOM?",
+            options: [
+              "Events travel from the window down to the target element",
+              "Events trigger only on the root element",
+              "An event triggers on the deepest target element first and bubbles up through parent ancestors in the DOM tree",
+              "An error that causes infinite memory loops"
+            ],
+            correct: 2,
+            explanation: "During event bubbling, an event triggered on a target element propagates upward through its parent elements to the document root."
+          },
+          {
+            question: "How do you store a key-value pair in browser localStorage?",
+            options: [
+              "localStorage.save('key', 'value')",
+              "localStorage.setItem('key', 'value')",
+              "localStorage.put('key', 'value')",
+              "window.store('key', 'value')"
+            ],
+            correct: 1,
+            explanation: "localStorage.setItem(key, value) stores string key-value pairs persistently across browser sessions."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------------------------
+      // GENERAL KNOWLEDGE
+      // ------------------------------------------------------------------------
+      "general-knowledge": {
+        "easy": [
+          {
+            question: "Which planet in our solar system is known as the Red Planet?",
+            options: ["Venus", "Mars", "Jupiter", "Saturn"],
+            correct: 1,
+            explanation: "Mars appears reddish in the night sky due to iron oxide (rust) on its surface."
+          },
+          {
+            question: "What is the capital city of France?",
+            options: ["Rome", "Berlin", "Paris", "Madrid"],
+            correct: 2,
+            explanation: "Paris is the capital and largest city of France."
+          },
+          {
+            question: "How many days are there in a standard leap year?",
+            options: ["364", "365", "366", "367"],
+            correct: 2,
+            explanation: "A leap year has 366 days because February has 29 days instead of 28."
+          },
+          {
+            question: "Which is the largest ocean on Earth?",
+            options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+            correct: 3,
+            explanation: "The Pacific Ocean is the world's largest and deepest ocean basin."
+          },
+          {
+            question: "What currency is used in Japan?",
+            options: ["Yuan", "Yen", "Won", "Baht"],
+            correct: 1,
+            explanation: "The Japanese Yen (¥) is the official currency of Japan."
+          }
+        ],
+        "medium": [
+          {
+            question: "Who is widely credited with inventing the World Wide Web in 1989?",
+            options: ["Bill Gates", "Steve Jobs", "Tim Berners-Lee", "Alan Turing"],
+            correct: 2,
+            explanation: "Sir Tim Berners-Lee invented the World Wide Web in 1989 while working at CERN."
+          },
+          {
+            question: "Who is recognized as the world's first computer programmer?",
+            options: ["Ada Lovelace", "Grace Hopper", "Charles Babbage", "Katherine Johnson"],
+            correct: 0,
+            explanation: "Ada Lovelace wrote the first algorithm intended for Charles Babbage's Analytical Engine in the 1840s."
+          },
+          {
+            question: "Which country has the longest coastline in the world?",
+            options: ["Russia", "Australia", "Canada", "United States"],
+            correct: 2,
+            explanation: "Canada possesses the world's longest coastline, measuring over 202,000 kilometers."
+          },
+          {
+            question: "In which European city is the headquarters of the United Nations International Court of Justice located?",
+            options: ["Geneva", "Brussels", "The Hague", "Vienna"],
+            correct: 2,
+            explanation: "The International Court of Justice (ICJ) is situated at the Peace Palace in The Hague, Netherlands."
+          },
+          {
+            question: "Who painted the famous masterpiece 'Girl with a Pearl Earring'?",
+            options: ["Johannes Vermeer", "Vincent van Gogh", "Leonardo da Vinci", "Pablo Picasso"],
+            correct: 0,
+            explanation: "The iconic painting 'Girl with a Pearl Earring' was created by Dutch master Johannes Vermeer around 1665."
+          }
+        ],
+        "hard": [
+          {
+            question: "Which 1944 monetary conference established the IMF (International Monetary Fund) and World Bank?",
+            options: ["Geneva Accords", "Bretton Woods Conference", "Treaty of Versailles", "Yalta Conference"],
+            correct: 1,
+            explanation: "The Bretton Woods Conference in New Hampshire, USA established the IMF and the International Bank for Reconstruction and Development."
+          },
+          {
+            question: "What is the deepest known location in the Earth's oceans?",
+            options: ["Java Trench", "Puerto Rico Trench", "Challenger Deep", "Milwaukee Deep"],
+            correct: 2,
+            explanation: "Challenger Deep, located in the southern Mariana Trench, is the deepest surveyed point in Earth's oceans (~10,928 meters)."
+          },
+          {
+            question: "In what year did Alan Turing publish his landmark paper introducing the 'Turing Machine'?",
+            options: ["1925", "1936", "1945", "1952"],
+            correct: 1,
+            explanation: "Alan Turing published 'On Computable Numbers, with an Application to the Entscheidungsproblem' in 1936."
+          },
+          {
+            question: "Who wrote the mathematical treatise 'Philosophiae Naturalis Principia Mathematica' published in 1687?",
+            options: ["Galileo Galilei", "Isaac Newton", "Johannes Kepler", "René Descartes"],
+            correct: 1,
+            explanation: "Sir Isaac Newton's 'Principia' formulated the laws of motion and universal gravitation."
+          },
+          {
+            question: "Which element has the highest melting point of all known metals?",
+            options: ["Titanium", "Platinum", "Tungsten", "Osmium"],
+            correct: 2,
+            explanation: "Tungsten (W) has the highest melting point of any metal at approximately 3,422 °C (6,192 °F)."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------------------------
+      // SCIENCE
+      // ------------------------------------------------------------------------
+      "science": {
+        "easy": [
+          {
+            question: "What is the chemical formula for water?",
+            options: ["CO2", "H2O", "O2", "NaCl"],
+            correct: 1,
+            explanation: "Water consists of two hydrogen atoms bonded to one oxygen atom (H2O)."
+          },
+          {
+            question: "Which organ in the human body pumps blood through the circulatory system?",
+            options: ["Lungs", "Brain", "Heart", "Liver"],
+            correct: 2,
+            explanation: "The heart is the muscular organ responsible for pumping blood throughout the body."
+          },
+          {
+            question: "What biological process do plants use to convert sunlight into food?",
+            options: ["Respiration", "Photosynthesis", "Fermentation", "Transpiration"],
+            correct: 1,
+            explanation: "Photosynthesis uses chlorophyll to capture sunlight and synthesize nutrients from water and carbon dioxide."
+          },
+          {
+            question: "What gas do humans need to breathe in to survive?",
+            options: ["Carbon Dioxide", "Nitrogen", "Oxygen", "Helium"],
+            correct: 2,
+            explanation: "Oxygen is vital for human cellular respiration to generate energy."
+          },
+          {
+            question: "What force pulls objects toward the center of the Earth?",
+            options: ["Magnetism", "Gravity", "Friction", "Inertia"],
+            correct: 1,
+            explanation: "Gravity is the fundamental attractive force between masses."
+          }
+        ],
+        "medium": [
+          {
+            question: "Which cell organelle is commonly referred to as the 'powerhouse of the cell'?",
+            options: ["Nucleus", "Ribosome", "Mitochondria", "Endoplasmic Reticulum"],
+            correct: 2,
+            explanation: "Mitochondria generate most of the chemical energy needed to power biochemical reactions in the form of ATP."
+          },
+          {
+            question: "Approximately what is the speed of light in a vacuum?",
+            options: ["3,000 km/s", "30,000 km/s", "300,000 km/s", "3,000,000 km/s"],
+            correct: 2,
+            explanation: "Light travels in a vacuum at roughly 300,000 kilometers per second (299,792 km/s)."
+          },
+          {
+            question: "What is Newton's First Law of Motion also known as?",
+            options: ["The Law of Acceleration", "The Law of Inertia", "The Law of Action-Reaction", "The Law of Conservation"],
+            correct: 1,
+            explanation: "Newton's First Law (Law of Inertia) states that an object remains at rest or in uniform motion unless acted upon by an external force."
+          },
+          {
+            question: "What is the common chemical name for table salt?",
+            options: ["Potassium Chloride", "Sodium Bicarbonate", "Sodium Chloride", "Calcium Carbonate"],
+            correct: 2,
+            explanation: "Table salt is composed of sodium and chlorine ions, creating Sodium Chloride (NaCl)."
+          },
+          {
+            question: "What gas makes up approximately 78% of the Earth's atmosphere?",
+            options: ["Oxygen", "Nitrogen", "Argon", "Carbon Dioxide"],
+            correct: 1,
+            explanation: "Nitrogen gas (N2) comprises about 78% of Earth's atmosphere, followed by oxygen at 21%."
+          }
+        ],
+        "hard": [
+          {
+            question: "What is the temperature of absolute zero in degrees Celsius?",
+            options: ["-100 °C", "-273.15 °C", "-350.25 °C", "-459.67 °C"],
+            correct: 1,
+            explanation: "Absolute zero is 0 Kelvin or exactly -273.15 °C, the theoretical point where all molecular motion ceases."
+          },
+          {
+            question: "What type of inheritance does human mitochondrial DNA (mtDNA) follow?",
+            options: ["Paternal inheritance only", "Maternal inheritance only", "Equal co-dominance", "Sex-linked recessive"],
+            correct: 1,
+            explanation: "Human mitochondrial DNA is inherited almost exclusively from the mother via the egg cell."
+          },
+          {
+            question: "What phenomenon describes the observed change in frequency of a wave for an observer moving relative to its source?",
+            options: ["Photoelectric effect", "Doppler effect", "Compton scattering", "Tyndall effect"],
+            correct: 1,
+            explanation: "The Doppler effect causes frequency shifts when wave sources (sound, light) move toward or away from an observer."
+          },
+          {
+            question: "Which semiconductor element is most commonly used as the foundation of modern computer microchips?",
+            options: ["Germanium", "Silicon", "Gallium", "Graphene"],
+            correct: 1,
+            explanation: "Silicon is the foundation of the semiconductor industry due to its abundance, stability, and ideal electrical bandgap."
+          },
+          {
+            question: "Which subatomic particles are made of quarks held together by the strong nuclear force?",
+            options: ["Photons", "Leptons", "Hadrons (Protons and Neutrons)", "Electrons"],
+            correct: 2,
+            explanation: "Hadrons (including baryons like protons and neutrons) are composite subatomic particles made of quarks bound by gluons."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------------------------
+      // COMPUTER BASICS
+      // ------------------------------------------------------------------------
+      "computer-basics": {
+        "easy": [
+          {
+            question: "What does CPU stand for?",
+            options: [
+              "Central Processing Unit",
+              "Computer Personal Unit",
+              "Central Peripheral Utility",
+              "Core Power Unit"
+            ],
+            correct: 0,
+            explanation: "The CPU (Central Processing Unit) acts as the 'brain' of the computer, executing instructions."
+          },
+          {
+            question: "What does RAM stand for?",
+            options: [
+              "Read Access Memory",
+              "Random Access Memory",
+              "Rapid Action Module",
+              "Run Application Memory"
+            ],
+            correct: 1,
+            explanation: "RAM stands for Random Access Memory, high-speed temporary working memory."
+          },
+          {
+            question: "Which keyboard shortcut is commonly used to copy selected content?",
+            options: ["Ctrl + V", "Ctrl + C", "Ctrl + X", "Ctrl + Z"],
+            correct: 1,
+            explanation: "Ctrl + C copies selected items, while Ctrl + V pastes them."
+          },
+          {
+            question: "Which of the following is an example of an Operating System?",
+            options: ["Microsoft Excel", "Google Chrome", "Windows 11", "Adobe Photoshop"],
+            correct: 2,
+            explanation: "Windows 11, macOS, and Linux are operating systems that manage computer hardware and software resources."
+          },
+          {
+            question: "How many bits are in one standard byte?",
+            options: ["4", "8", "16", "32"],
+            correct: 1,
+            explanation: "One byte consists of 8 bits."
+          }
+        ],
+        "medium": [
+          {
+            question: "What is the primary operational difference between RAM and ROM?",
+            options: [
+              "RAM is volatile (loses data on power off), while ROM is non-volatile (retains data)",
+              "RAM is permanent storage, ROM is temporary cache",
+              "RAM is only found on smartphones, ROM is for PCs",
+              "There is no difference in data retention"
+            ],
+            correct: 0,
+            explanation: "RAM is volatile memory cleared when the system loses power, whereas ROM (Read-Only Memory) retains its data."
+          },
+          {
+            question: "What does DNS stand for in computer networking?",
+            options: [
+              "Data Network Security",
+              "Domain Name System",
+              "Direct Network Server",
+              "Digital Name Solution"
+            ],
+            correct: 1,
+            explanation: "The Domain Name System (DNS) translates human-readable domain names (like google.com) into numerical IP addresses."
+          },
+          {
+            question: "What is the function of the computer's BIOS / UEFI?",
+            options: [
+              "It scans files for viruses during download",
+              "It initializes hardware during boot and loads the operating system",
+              "It accelerates 3D video game graphics",
+              "It backups files to the cloud automatically"
+            ],
+            correct: 1,
+            explanation: "BIOS/UEFI is motherboard firmware that performs the POST test and bootstraps the operating system."
+          },
+          {
+            question: "What is the main advantage of an SSD (Solid State Drive) over a traditional HDD (Hard Disk Drive)?",
+            options: [
+              "SSDs contain mechanical spinning platters",
+              "SSDs offer significantly faster read/write speeds and no moving parts",
+              "SSDs are always cheaper per gigabyte",
+              "SSDs require no electrical power"
+            ],
+            correct: 1,
+            explanation: "SSDs use flash memory with no moving parts, delivering much faster load times and higher reliability."
+          },
+          {
+            question: "What does an IP address do on a computer network?",
+            options: [
+              "Measures the clock speed of the processor",
+              "Uniquely identifies a device on a local or internet network",
+              "Stores the user's saved passwords",
+              "Encrypts web traffic automatically"
+            ],
+            correct: 1,
+            explanation: "An Internet Protocol (IP) address is a numerical label assigned to each connected device for identification and routing."
+          }
+        ],
+        "hard": [
+          {
+            question: "Which level of CPU cache memory is typically the fastest and closest to the processor cores?",
+            options: ["L1 Cache", "L2 Cache", "L3 Cache", "RAM Cache"],
+            correct: 0,
+            explanation: "L1 (Level 1) cache is built directly inside each CPU core, providing the fastest access speeds with the lowest latency."
+          },
+          {
+            question: "What is the primary difference between a Compiler and an Interpreter?",
+            options: [
+              "A compiler runs code line-by-line, while an interpreter translates everything at once",
+              "A compiler translates the entire source code into machine code before execution, while an interpreter translates and executes line-by-line",
+              "A compiler is only used for Python code",
+              "Interpreters can only run on mobile devices"
+            ],
+            correct: 1,
+            explanation: "Compilers (e.g., C++, Rust) translate code into an executable upfront; interpreters (e.g., Python, Ruby) parse and execute code on the fly."
+          },
+          {
+            question: "What is a major advantage of a 64-bit CPU architecture compared to a 32-bit architecture?",
+            options: [
+              "A 64-bit CPU can address more than 4 GB of RAM directly",
+              "A 64-bit CPU consumes exactly half the electricity",
+              "A 64-bit CPU eliminates all software bugs",
+              "A 64-bit CPU does not need an operating system"
+            ],
+            correct: 0,
+            explanation: "A 32-bit system is limited to addressing 2^32 bytes (~4 GB) of RAM, while 64-bit systems can address theoretical petabytes of memory."
+          },
+          {
+            question: "What is RAID 1 commonly used for in storage systems?",
+            options: [
+              "Data striping across drives for speed only",
+              "Data mirroring for fault tolerance and redundancy",
+              "Cloud-only encryption",
+              "Compressing video files"
+            ],
+            correct: 1,
+            explanation: "RAID 1 creates an identical mirror of data across two or more disks, so if one drive fails, no data is lost."
+          },
+          {
+            question: "In computer networking, what transport protocol provides connection-oriented, guaranteed in-order packet delivery?",
+            options: ["UDP", "IP", "TCP", "ICMP"],
+            correct: 2,
+            explanation: "TCP (Transmission Control Protocol) establishes a connection and verifies that all packets arrive intact and in proper order."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------------------------
+      // COLLEGE PROJECTS
+      // ------------------------------------------------------------------------
+      "college-projects": {
+        "easy": [
+          {
+            question: "What is Git primarily used for in software projects?",
+            options: [
+              "Compiling C code",
+              "Version control and tracking code changes",
+              "Hosting cloud databases",
+              "Designing vector user interfaces"
+            ],
+            correct: 1,
+            explanation: "Git is a distributed version control system that tracks source code revisions and enables collaboration."
+          },
+          {
+            question: "What is the standard purpose of a 'README.md' file in a project repository?",
+            options: [
+              "To store secret database passwords",
+              "To explain the project's purpose, setup instructions, and features",
+              "To compile the source code into an executable",
+              "To list all ignored binary files"
+            ],
+            correct: 1,
+            explanation: "The README file introduces the project, explains how to install and run it, and documents key features for other developers."
+          },
+          {
+            question: "What does the acronym 'MVP' stand for in software and startup projects?",
+            options: [
+              "Most Valuable Programmer",
+              "Minimum Viable Product",
+              "Maximum Velocity Performance",
+              "Main Variable Parameter"
+            ],
+            correct: 1,
+            explanation: "An MVP (Minimum Viable Product) is the earliest version of a product with enough core features to be usable and gather feedback."
+          },
+          {
+            question: "Which file in a Git repository specifies intentional untracked files to ignore (like node_modules or .env)?",
+            options: [".gitconfig", ".gitignore", ".gitkeep", "ignore.txt"],
+            correct: 1,
+            explanation: ".gitignore instructs Git to disregard temporary files, build outputs, and credentials."
+          },
+          {
+            question: "Why is practicing effective communication important in college group projects?",
+            options: [
+              "It ensures everyone works in isolation without knowing what others are doing",
+              "It helps prevent overlapping work, clarifies deadlines, and ensures team alignment",
+              "It eliminates the need to write any code",
+              "It replaces the project documentation"
+            ],
+            correct: 1,
+            explanation: "Good communication keeps team members aligned on tasks, avoids duplicated effort, and ensures smooth project delivery."
+          }
+        ],
+        "medium": [
+          {
+            question: "What is the purpose of wireframing before writing code for a frontend project?",
+            options: [
+              "To compile backend database queries",
+              "To visualize page layout, user flows, and interface structure early",
+              "To automatically generate CSS code",
+              "To test network bandwidth"
+            ],
+            correct: 1,
+            explanation: "Wireframes allow designers and developers to plan layouts, content hierarchy, and interactions before committing time to code."
+          },
+          {
+            question: "What is considered a best practice for writing Git commit messages?",
+            options: [
+              "Write 'fixed stuff' or 'update' for every commit",
+              "Write concise, descriptive messages explaining what was changed and why",
+              "Never commit code until the entire project is completed",
+              "Use random numbers as messages"
+            ],
+            correct: 1,
+            explanation: "Clear commit messages (e.g., 'Add user login form validation') make it easy for teammates and evaluators to follow project history."
+          },
+          {
+            question: "In Agile methodology, what is a 'Sprint'?",
+            options: [
+              "A race to finish code in 30 minutes",
+              "A fixed time period (usually 1-3 weeks) where specific work items are completed",
+              "A meeting where grades are assigned",
+              "A tool for formatting code"
+            ],
+            correct: 1,
+            explanation: "A Sprint is a time-boxed iteration during which the team delivers a defined set of planned deliverables."
+          },
+          {
+            question: "What does an API (Application Programming Interface) do?",
+            options: [
+              "Protects computer hardware from overheating",
+              "Allows different software applications to communicate and exchange data",
+              "Formats CSS stylesheets automatically",
+              "Replaces the need for a web browser"
+            ],
+            correct: 1,
+            explanation: "An API defines rules and specifications that allow two separate applications to communicate with each other."
+          },
+          {
+            question: "What is the primary role of Software Testing (like Unit Tests)?",
+            options: [
+              "To increase the size of the repository",
+              "To verify that individual functions and features behave as expected and prevent regressions",
+              "To replace documentation entirely",
+              "To make code run 10x faster"
+            ],
+            correct: 1,
+            explanation: "Tests verify that code functions correctly under various conditions and catch bugs before users encounter them."
+          }
+        ],
+        "hard": [
+          {
+            question: "What does 'Technical Debt' refer to in software engineering?",
+            options: [
+              "The monetary cost of purchasing laptops for developers",
+              "The implied cost of future rework caused by choosing an easy or quick solution now instead of a better approach",
+              "The electricity bill generated by running cloud servers",
+              "Late fees on software licenses"
+            ],
+            correct: 1,
+            explanation: "Technical debt is the accrued burden of messy, rushed code that will require extra refactoring effort down the road."
+          },
+          {
+            question: "Why should sensitive credentials like API keys and database passwords NEVER be committed to Git repositories?",
+            options: [
+              "It increases the file download size",
+              "Anyone with access to the repository can steal credentials and compromise services or incur costs",
+              "Git refuses to track strings with numbers",
+              "Browsers cannot parse keys inside Git"
+            ],
+            correct: 1,
+            explanation: "Hardcoded secrets in public or shared repositories can be harvested by automated bots, leading to data breaches and unexpected cloud bills."
+          },
+          {
+            question: "What is Continuous Integration (CI)?",
+            options: [
+              "Writing code non-stop without taking breaks",
+              "The automated practice of merging and testing code changes frequently to catch integration bugs early",
+              "Paying a recurring subscription fee for cloud hosting",
+              "A hardware standard for network cables"
+            ],
+            correct: 1,
+            explanation: "CI automatically builds and tests code whenever developers commit changes, ensuring the main branch remains stable."
+          },
+          {
+            question: "What is Database Normalization primarily designed to achieve?",
+            options: [
+              "To duplicate data across tables as many times as possible",
+              "To reduce data redundancy and improve data integrity in relational databases",
+              "To convert SQL databases into NoSQL databases",
+              "To delete old records automatically"
+            ],
+            correct: 1,
+            explanation: "Normalization organizes database tables and relationships to minimize duplicate data and eliminate update anomalies."
+          },
+          {
+            question: "When selecting a tech stack for a college project, which consideration is usually most important for beginners?",
+            options: [
+              "Picking the newest, most obscure framework released yesterday",
+              "Choosing well-documented, familiar technologies with strong community support that fit the project scope",
+              "Using 10 different programming languages in one project",
+              "Picking tools solely based on popularity on social media"
+            ],
+            correct: 1,
+            explanation: "For student projects, proven tools with rich documentation, tutorials, and active communities save enormous time and avoid roadblocks."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------------------------
+      // HACKATHONS
+      // ------------------------------------------------------------------------
+      "hackathons": {
+        "easy": [
+          {
+            question: "What is a hackathon?",
+            options: [
+              "An illegal cybersecurity attack event",
+              "An intensive collaborative event where teams build prototype projects within a limited time",
+              "A formal college examination",
+              "A typing speed contest"
+            ],
+            correct: 1,
+            explanation: "A hackathon is an event where developers, designers, and innovators come together to build working prototypes within 24 to 48 hours."
+          },
+          {
+            question: "What is usually the most common duration for an in-person or weekend hackathon?",
+            options: ["2 to 3 hours", "24 to 48 hours", "30 days", "6 months"],
+            correct: 1,
+            explanation: "Most hackathons run over a weekend for 24 to 48 continuous hours."
+          },
+          {
+            question: "Why is the final project demonstration or pitch so important in a hackathon?",
+            options: [
+              "Judges evaluate projects largely based on how well the team explains the problem, solution, and working demo",
+              "It is the only time food is served",
+              "Pitching allows you to skip submitting your code",
+              "It determines who gets a certificate of participation only"
+            ],
+            correct: 0,
+            explanation: "Even the best code needs a compelling pitch so judges understand what problem it solves and see that it actually works."
+          },
+          {
+            question: "What is a key recommended hackathon strategy when time starts running low?",
+            options: [
+              "Try adding 5 new complex features right before the deadline",
+              "Freeze new features and polish a solid working demo of your core feature",
+              "Delete all code and start over from scratch",
+              "Skip the pitch presentation"
+            ],
+            correct: 1,
+            explanation: "A polished, working core feature is much better than five broken, half-implemented features during the demo."
+          },
+          {
+            question: "Which of these is a great reason for first-year college students to participate in hackathons?",
+            options: [
+              "To learn new technologies, build teamwork skills, and create portfolio projects",
+              "To compete only if you already know every programming language",
+              "To write production enterprise software for commercial sale",
+              "To skip all college coursework permanently"
+            ],
+            correct: 0,
+            explanation: "Hackathons offer an accelerated environment to learn by doing, meet mentors, and build exciting projects for your resume."
+          }
+        ],
+        "medium": [
+          {
+            question: "What are the common key components of a strong 3-minute hackathon pitch?",
+            options: [
+              "Problem statement, Solution, Live Demo, and Impact / Future scope",
+              "Reading 100 slides of dense source code line-by-line",
+              "Explaining every single line of CSS code",
+              "Discussing team arguments during the weekend"
+            ],
+            correct: 0,
+            explanation: "A winning pitch quickly hooks judges with the problem, presents your unique solution, demonstrates the working product, and explains its impact."
+          },
+          {
+            question: "Are teams generally allowed to use open-source libraries and APIs in hackathons?",
+            options: [
+              "No, you must write your own compiler, browser, and operating system",
+              "Yes, using existing open-source libraries and APIs is encouraged, as long as the project idea and core code are built during the event",
+              "Only if you pay thousands of dollars for special licenses",
+              "Only on mobile apps"
+            ],
+            correct: 1,
+            explanation: "Hackathon rules encourage leveraging open-source tools and public APIs so teams can focus on building innovative solutions quickly."
+          },
+          {
+            question: "What is a 'fallback plan' every team should prepare in case live internet fails during their hackathon demo?",
+            options: [
+              "Blame the venue organizers and cancel the presentation",
+              "Have a pre-recorded screen video or backup screenshots of the working product on your local machine",
+              "Promise the judges you will email them next week",
+              "Pretend the app works without showing anything"
+            ],
+            correct: 1,
+            explanation: "WiFi at large hackathons can be unpredictable; having a screen recording of your working demo ensures you can still impress judges."
+          },
+          {
+            question: "In hackathons, what does the 'Impact' judging criterion usually evaluate?",
+            options: [
+              "How loudly the team presented on stage",
+              "How effectively the project addresses a real-world problem and creates meaningful value for its target users",
+              "How many total lines of code were written",
+              "The number of colors used in the logo"
+            ],
+            correct: 1,
+            explanation: "'Impact' assesses whether the solution actually helps people, solves a genuine pain point, or delivers practical real-world benefits."
+          },
+          {
+            question: "Why should teams keep their code modular and push commits frequently to GitHub during a hackathon?",
+            options: [
+              "To make git commit graphs look like artwork",
+              "To avoid catastrophic last-minute merge conflicts and protect against accidental code loss",
+              "Because hackathon judges penalize repositories with fewer than 500 commits",
+              "To prevent teammates from viewing each other's code"
+            ],
+            correct: 1,
+            explanation: "Frequent commits and small branch merges reduce merge conflicts and ensure no one loses hours of work if a computer crashes."
+          }
+        ],
+        "hard": [
+          {
+            question: "What is often considered the optimal team composition for a 4-person hackathon team?",
+            options: [
+              "Four backend database specialists with no design or frontend skills",
+              "A balanced mix of Frontend/UI, Backend/Data, Pitch/Product, and Design/UX",
+              "Four designers who do not write any code",
+              "Four project managers who do not build anything"
+            ],
+            correct: 1,
+            explanation: "Diverse teams that combine design, frontend, backend logic, and storytelling create well-rounded projects with standout presentations."
+          },
+          {
+            question: "If an external API is too slow, rate-limited, or unstable during a hackathon, what technique should the team use?",
+            options: [
+              "Abandon the idea immediately and go to sleep",
+              "Mock the API responses locally with realistic JSON data so the frontend flow can still be demonstrated smoothly",
+              "Spam the API endpoint with thousands of requests",
+              "Switch to a completely different programming language"
+            ],
+            correct: 1,
+            explanation: "Mocking API responses with sample JSON keeps your UI responsive and allows judges to experience the user journey without network delays."
+          },
+          {
+            question: "What storytelling technique is most effective when introducing your project problem to judges?",
+            options: [
+              "Reciting long tables of obscure mathematical theorems",
+              "Sharing a relatable, specific user story or persona experiencing the problem firsthand",
+              "Telling judges that all existing software in the world is terrible",
+              "Reading dictionary definitions of common words"
+            ],
+            correct: 1,
+            explanation: "A relatable persona or user story immediately contextualizes the problem and emotionally connects judges with your solution."
+          },
+          {
+            question: "What distinguishes a prototype created in a hackathon from a production-ready application?",
+            options: [
+              "A hackathon prototype focuses on demonstrating viability, UX, and core value, whereas production apps require scaling, security hardening, and full edge-case handling",
+              "There is no difference; hackathon projects are always ready for enterprise deployment",
+              "Hackathon prototypes cannot use databases",
+              "Production apps must never have user interfaces"
+            ],
+            correct: 0,
+            explanation: "Hackathon prototypes prove an idea can work (Proof of Concept); turning them into production software requires thorough testing, security, and scaling."
+          },
+          {
+            question: "After a hackathon ends, what is the best recommended step to maximize value from the experience?",
+            options: [
+              "Delete the repository immediately to save disk space",
+              "Clean up the README, record a 2-minute demo video, publish the repo on GitHub, and feature it on your resume or LinkedIn",
+              "Argue with the judges about scoring rubrics",
+              "Never touch the code again"
+            ],
+            correct: 1,
+            explanation: "Documenting your project with a clean README, live demo link, and video turns your hackathon effort into an impressive portfolio piece for internships."
+          }
+        ]
+      }
+    };
+
+    /* ==========================================================================
+       3. STATE MANAGEMENT
+       ========================================================================== */
+    const state = {
+      selectedTopicId: null,
+      selectedDifficulty: "easy",
+      activeQuizTopic: null,
+      activeDifficulty: null,
+      questions: [],         // Shuffled array of questions for active quiz
+      currentIndex: 0,       // Current question index (0 to total-1)
+      userAnswers: [],       // Array storing { selectedIndex, isCorrect } for each question
+      isQuizActive: false,
+      pendingAction: null    // Callback stored for modal confirmation
+    };
+
+    /* ==========================================================================
+       4. DOM ELEMENTS CACHE
+       ========================================================================== */
+    const screens = {
+      welcome: document.getElementById("screenWelcome"),
+      quiz: document.getElementById("screenQuiz"),
+      results: document.getElementById("screenResults")
+    };
+
+    const dom = {
+      brandLogo: document.getElementById("brandLogo"),
+      difficultySelector: document.getElementById("difficultySelector"),
+      diffButtons: document.querySelectorAll(".diff-btn"),
+      topicsGrid: document.getElementById("topicsGrid"),
+      btnStartQuiz: document.getElementById("btnStartQuiz"),
+      
+      // Quiz UI
+      btnBackToTopics: document.getElementById("btnBackToTopics"),
+      quizTopicTag: document.getElementById("quizTopicTag"),
+      quizDiffTag: document.getElementById("quizDiffTag"),
+      questionCounter: document.getElementById("questionCounter"),
+      progressBarFill: document.getElementById("progressBarFill"),
+      questionTitle: document.getElementById("questionTitle"),
+      optionsContainer: document.getElementById("optionsContainer"),
+      explanationBox: document.getElementById("explanationBox"),
+      explanationText: document.getElementById("explanationText"),
+      btnRestartQuiz: document.getElementById("btnRestartQuiz"),
+      btnPrevQuestion: document.getElementById("btnPrevQuestion"),
+      btnNextQuestion: document.getElementById("btnNextQuestion"),
+
+      // Results UI
+      resultsBadgeIcon: document.getElementById("resultsBadgeIcon"),
+      resultsHeading: document.getElementById("resultsHeading"),
+      resultsMessage: document.getElementById("resultsMessage"),
+      statScore: document.getElementById("statScore"),
+      statPercentage: document.getElementById("statPercentage"),
+      statCorrect: document.getElementById("statCorrect"),
+      statIncorrect: document.getElementById("statIncorrect"),
+      btnRetryQuiz: document.getElementById("btnRetryQuiz"),
+      btnChooseAnotherTopic: document.getElementById("btnChooseAnotherTopic"),
+      btnToggleReview: document.getElementById("btnToggleReview"),
+      reviewContainer: document.getElementById("reviewContainer"),
+
+      // Modal Dialog
+      confirmModal: document.getElementById("confirmModal"),
+      modalTitle: document.getElementById("modalTitle"),
+      modalMessage: document.getElementById("modalMessage"),
+      modalBtnCancel: document.getElementById("modalBtnCancel"),
+      modalBtnConfirm: document.getElementById("modalBtnConfirm")
+    };
+
+    /* ==========================================================================
+       5. HELPER FUNCTIONS
+       ========================================================================== */
+    /**
+     * Switch visible screen smoothly
+     * @param {string} screenName - 'welcome' | 'quiz' | 'results'
+     */
+    function switchScreen(screenName) {
+      Object.keys(screens).forEach(key => {
+        if (key === screenName) {
+          screens[key].classList.add("active");
+        } else {
+          screens[key].classList.remove("active");
+        }
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /**
+     * Fisher-Yates array shuffling algorithm (creates a randomized copy)
+     * @param {Array} array
+     * @returns {Array} Shuffled copy of original array
+     */
+    function shuffleArray(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    /**
+     * Show modal confirmation dialog
+     * @param {string} title 
+     * @param {string} message 
+     * @param {Function} onConfirm 
+     */
+    function showConfirmation(title, message, onConfirm) {
+      dom.modalTitle.textContent = title;
+      dom.modalMessage.textContent = message;
+      state.pendingAction = onConfirm;
+      dom.confirmModal.classList.add("active");
+    }
+
+    /**
+     * Hide modal confirmation dialog
+     */
+    function hideConfirmation() {
+      dom.confirmModal.classList.remove("active");
+      state.pendingAction = null;
+    }
+
+    /* ==========================================================================
+       6. TOPIC & DIFFICULTY SELECTION
+       ========================================================================== */
+    /**
+     * Render the 8 Topic Cards in the Welcome Screen
+     */
+    function renderTopicCards() {
+      dom.topicsGrid.innerHTML = "";
+
+      TOPICS.forEach(topic => {
+        const card = document.createElement("div");
+        card.className = "topic-card";
+        card.setAttribute("data-topic-id", topic.id);
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+
+        // Calculate total questions available for this topic
+        const topicData = QUESTION_BANK[topic.id];
+        let totalCount = 0;
+        if (topicData) {
+          totalCount = (topicData.easy?.length || 0) +
+                       (topicData.medium?.length || 0) +
+                       (topicData.hard?.length || 0);
+        }
+
+        card.innerHTML = `
+          <div class="topic-card-icon" style="background-color: ${topic.bgColor}">
+            ${topic.icon}
+          </div>
+          <div class="topic-card-title">${topic.title}</div>
+          <div class="topic-card-desc">${topic.description}</div>
+          <div class="topic-card-meta">${totalCount} Questions Available</div>
+        `;
+
+        card.addEventListener("click", () => selectTopic(topic.id));
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            selectTopic(topic.id);
+          }
+        });
+
+        dom.topicsGrid.appendChild(card);
+      });
+    }
+
+    /**
+     * Handle Topic Selection
+     * @param {string} topicId 
+     */
+    function selectTopic(topicId) {
+      state.selectedTopicId = topicId;
+
+      // Update UI classes
+      document.querySelectorAll(".topic-card").forEach(card => {
+        if (card.getAttribute("data-topic-id") === topicId) {
+          card.classList.add("selected");
+        } else {
+          card.classList.remove("selected");
+        }
+      });
+
+      // Enable Start Button
+      const topicObj = TOPICS.find(t => t.id === topicId);
+      dom.btnStartQuiz.disabled = false;
+      dom.btnStartQuiz.textContent = `Start ${topicObj.title} Quiz (${state.selectedDifficulty.toUpperCase()}) →`;
+    }
+
+    /**
+     * Handle Difficulty Selection
+     * @param {string} difficulty - 'easy' | 'medium' | 'hard'
+     */
+    function selectDifficulty(difficulty) {
+      state.selectedDifficulty = difficulty;
+
+      dom.diffButtons.forEach(btn => {
+        if (btn.getAttribute("data-difficulty") === difficulty) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+
+      // Update button text if topic is already selected
+      if (state.selectedTopicId) {
+        const topicObj = TOPICS.find(t => t.id === state.selectedTopicId);
+        dom.btnStartQuiz.textContent = `Start ${topicObj.title} Quiz (${difficulty.toUpperCase()}) →`;
+      }
+    }
+
+    /* ==========================================================================
+       7. QUIZ INITIALIZATION & LIFECYCLE
+       ========================================================================== */
+    /**
+     * Start a new quiz session with the selected topic and difficulty
+     */
+    function startQuiz() {
+      if (!state.selectedTopicId) return;
+
+      const topicData = QUESTION_BANK[state.selectedTopicId];
+      if (!topicData || !topicData[state.selectedDifficulty] || topicData[state.selectedDifficulty].length === 0) {
+        alert("Sorry, no questions are currently available for this topic and difficulty level.");
+        return;
+      }
+
+      // Shuffle questions to ensure dynamic experience on each attempt
+      state.activeQuizTopic = TOPICS.find(t => t.id === state.selectedTopicId);
+      state.activeDifficulty = state.selectedDifficulty;
+      state.questions = shuffleArray(topicData[state.selectedDifficulty]);
+      state.currentIndex = 0;
+      state.userAnswers = new Array(state.questions.length).fill(null);
+      state.isQuizActive = true;
+
+      // Update header badges
+      dom.quizTopicTag.textContent = state.activeQuizTopic.title;
+      dom.quizDiffTag.textContent = state.activeDifficulty;
+      dom.quizDiffTag.className = `tag-diff ${state.activeDifficulty}`;
+
+      // Switch screen and load question 1
+      switchScreen("quiz");
+      loadQuestion(0);
+    }
+
+    /**
+     * Load a specific question by index
+     * @param {number} index 
+     */
+    function loadQuestion(index) {
+      state.currentIndex = index;
+      const q = state.questions[index];
+      const total = state.questions.length;
+
+      // Update Question Counter (e.g., Question 1 of 5)
+      dom.questionCounter.textContent = `Question ${index + 1} of ${total}`;
+
+      // Update Progress Bar
+      const answeredCount = state.userAnswers.filter(a => a !== null).length;
+      const progressPercent = ((index) / total) * 100;
+      dom.progressBarFill.style.width = `${progressPercent}%`;
+
+      // Render Question Title
+      dom.questionTitle.textContent = q.question;
+
+      // Render Option Buttons
+      dom.optionsContainer.innerHTML = "";
+      const letters = ["A", "B", "C", "D"];
+      const existingAnswer = state.userAnswers[index];
+
+      q.options.forEach((optText, optIdx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn";
+        btn.setAttribute("data-option-idx", optIdx);
+
+        btn.innerHTML = `
+          <div class="option-indicator">${letters[optIdx]}</div>
+          <div class="option-text">${optText}</div>
+          <span class="option-status-icon"></span>
+        `;
+
+        // If user already answered this question earlier:
+        if (existingAnswer !== null) {
+          btn.classList.add("disabled");
+
+          if (optIdx === q.correct) {
+            btn.classList.add("correct");
+            btn.querySelector(".option-status-icon").textContent = "✓";
+          } else if (optIdx === existingAnswer.selectedIndex) {
+            btn.classList.add("incorrect");
+            btn.querySelector(".option-status-icon").textContent = "✗";
+          }
+        } else {
+          // If not answered yet, attach click listener
+          btn.addEventListener("click", () => handleAnswerSelection(optIdx));
+        }
+
+        dom.optionsContainer.appendChild(btn);
+      });
+
+      // Handle Explanation Box
+      if (existingAnswer !== null) {
+        dom.explanationBox.classList.add("show");
+        dom.explanationText.textContent = q.explanation;
+      } else {
+        dom.explanationBox.classList.remove("show");
+      }
+
+      // Update Navigation Buttons
+      dom.btnPrevQuestion.disabled = (index === 0);
+
+      if (index === total - 1) {
+        dom.btnNextQuestion.textContent = "Finish & See Results 🎉";
+      } else {
+        dom.btnNextQuestion.textContent = "Next Question →";
+      }
+
+      // Next button is enabled only if user answered this question
+      dom.btnNextQuestion.disabled = (existingAnswer === null);
+    }
+
+    /**
+     * Handle user selecting an option
+     * @param {number} selectedOptionIndex 
+     */
+    function handleAnswerSelection(selectedOptionIndex) {
+      const q = state.questions[state.currentIndex];
+      const isCorrect = (selectedOptionIndex === q.correct);
+
+      // Record answer in state
+      state.userAnswers[state.currentIndex] = {
+        selectedIndex: selectedOptionIndex,
+        isCorrect: isCorrect
+      };
+
+      // Disable all option buttons to prevent multiple selections
+      const optionButtons = dom.optionsContainer.querySelectorAll(".option-btn");
+      optionButtons.forEach((btn, idx) => {
+        btn.classList.add("disabled");
+        const statusIcon = btn.querySelector(".option-status-icon");
+
+        if (idx === q.correct) {
+          btn.classList.add("correct");
+          statusIcon.textContent = "✓";
+        } else if (idx === selectedOptionIndex) {
+          btn.classList.add("incorrect");
+          statusIcon.textContent = "✗";
+        }
+      });
+
+      // Display Explanation
+      dom.explanationBox.classList.add("show");
+      dom.explanationText.textContent = q.explanation;
+
+      // Update progress bar to reflect new answer
+      const total = state.questions.length;
+      const answeredPercentage = ((state.currentIndex + 1) / total) * 100;
+      dom.progressBarFill.style.width = `${answeredPercentage}%`;
+
+      // Enable Next/Finish button
+      dom.btnNextQuestion.disabled = false;
+    }
+
+    /**
+     * Navigate to Previous Question
+     */
+    function prevQuestion() {
+      if (state.currentIndex > 0) {
+        loadQuestion(state.currentIndex - 1);
+      }
+    }
+
+    /**
+     * Navigate to Next Question or Finish
+     */
+    function nextQuestion() {
+      const total = state.questions.length;
+      if (state.currentIndex < total - 1) {
+        loadQuestion(state.currentIndex + 1);
+      } else {
+        finishQuiz();
+      }
+    }
+
+    /* ==========================================================================
+       8. SCORE CALCULATION & RESULTS
+       ========================================================================== */
+    /**
+     * Finish Quiz and render Results Screen
+     */
+    function finishQuiz() {
+      state.isQuizActive = false;
+
+      const totalQuestions = state.questions.length;
+      const correctAnswers = state.userAnswers.filter(a => a && a.isCorrect).length;
+      const incorrectAnswers = totalQuestions - correctAnswers;
+      const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+
+      // Set Stats
+      dom.statScore.textContent = `${correctAnswers}/${totalQuestions}`;
+      dom.statPercentage.textContent = `${percentage}%`;
+      dom.statCorrect.textContent = correctAnswers;
+      dom.statIncorrect.textContent = incorrectAnswers;
+
+      // Set Feedback Message and Badge based on score
+      if (percentage === 100) {
+        dom.resultsBadgeIcon.textContent = "🏆";
+        dom.resultsHeading.textContent = "Flawless Score! Outstanding!";
+        dom.resultsMessage.textContent = `Incredible work! You scored 100% on the ${state.activeQuizTopic.title} (${state.activeDifficulty.toUpperCase()}) quiz!`;
+      } else if (percentage >= 80) {
+        dom.resultsBadgeIcon.textContent = "🌟";
+        dom.resultsHeading.textContent = "Great Job! Well Done!";
+        dom.resultsMessage.textContent = `You have strong knowledge of ${state.activeQuizTopic.title}. Keep up the fantastic effort!`;
+      } else if (percentage >= 60) {
+        dom.resultsBadgeIcon.textContent = "👍";
+        dom.resultsHeading.textContent = "Good Effort! Keep Growing!";
+        dom.resultsMessage.textContent = `You passed the quiz! Review the questions below to master every concept.`;
+      } else {
+        dom.resultsBadgeIcon.textContent = "📚";
+        dom.resultsHeading.textContent = "Keep Practicing! You Got This!";
+        dom.resultsMessage.textContent = `Don't worry, every master was once a beginner. Check the explanations below and try again!`;
+      }
+
+      // Build Review Breakdown List
+      renderQuestionReview();
+
+      // Switch to Results Screen
+      switchScreen("results");
+    }
+
+    /**
+     * Render the Question Review List on the Results Screen
+     */
+    function renderQuestionReview() {
+      dom.reviewContainer.innerHTML = "";
+
+      state.questions.forEach((q, idx) => {
+        const ans = state.userAnswers[idx];
+        const isCorrect = ans ? ans.isCorrect : false;
+        const userChoiceText = ans !== null ? q.options[ans.selectedIndex] : "Not answered";
+        const correctChoiceText = q.options[q.correct];
+
+        const item = document.createElement("div");
+        item.className = `review-item ${isCorrect ? "was-correct" : "was-incorrect"}`;
+
+        item.innerHTML = `
+          <div class="review-q-text">
+            ${idx + 1}. ${q.question}
+          </div>
+          <div class="review-ans-row">
+            <strong>Your Answer:</strong> 
+            <span style="color: ${isCorrect ? "var(--success)" : "var(--danger)"};">
+              ${userChoiceText} ${isCorrect ? "✓ (Correct)" : "✗ (Incorrect)"}
+            </span>
+          </div>
+          ${!isCorrect ? `
+            <div class="review-ans-row">
+              <strong>Correct Answer:</strong> 
+              <span style="color: var(--success);">${correctChoiceText}</span>
+            </div>
+          ` : ""}
+          <div class="review-explanation">
+            <strong>💡 Explanation:</strong> ${q.explanation}
+          </div>
+        `;
+
+        dom.reviewContainer.appendChild(item);
+      });
+    }
+
+    /* ==========================================================================
+       9. EVENT LISTENERS & NAVIGATION HOOKS
+       ========================================================================== */
+    // Difficulty Buttons click
+    dom.diffButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        selectDifficulty(btn.getAttribute("data-difficulty"));
+      });
+    });
+
+    // Start Quiz Button
+    dom.btnStartQuiz.addEventListener("click", () => {
+      startQuiz();
+    });
+
+    // Previous Question Button
+    dom.btnPrevQuestion.addEventListener("click", prevQuestion);
+
+    // Next Question Button
+    dom.btnNextQuestion.addEventListener("click", nextQuestion);
+
+    // Restart Active Quiz Button (with safety confirmation)
+    dom.btnRestartQuiz.addEventListener("click", () => {
+      showConfirmation(
+        "Restart Current Quiz?",
+        "Are you sure you want to restart this quiz? Your current answers and score will be reset.",
+        () => {
+          startQuiz();
+        }
+      );
+    });
+
+    // Back to Topics from Active Quiz (with safety confirmation)
+    dom.btnBackToTopics.addEventListener("click", () => {
+      showConfirmation(
+        "Leave Current Quiz?",
+        "Are you sure you want to return to topic selection? Your current quiz progress will be lost.",
+        () => {
+          state.isQuizActive = false;
+          switchScreen("welcome");
+        }
+      );
+    });
+
+    // Brand logo click
+    dom.brandLogo.addEventListener("click", () => {
+      if (state.isQuizActive) {
+        showConfirmation(
+          "Leave Current Quiz?",
+          "Are you sure you want to leave the active quiz? Your current progress will be lost.",
+          () => {
+            state.isQuizActive = false;
+            switchScreen("welcome");
+          }
+        );
+      } else {
+        switchScreen("welcome");
+      }
+    });
+
+    // Retry Same Quiz from Results
+    dom.btnRetryQuiz.addEventListener("click", () => {
+      startQuiz();
+    });
+
+    // Choose Another Topic from Results
+    dom.btnChooseAnotherTopic.addEventListener("click", () => {
+      switchScreen("welcome");
+    });
+
+    // Toggle Review Section
+    dom.btnToggleReview.addEventListener("click", () => {
+      const isHidden = (dom.reviewContainer.style.display === "none");
+      dom.reviewContainer.style.display = isHidden ? "flex" : "none";
+      dom.btnToggleReview.querySelector("span").textContent = isHidden
+        ? "▲ Hide Detailed Question Review"
+        : "📋 Show Detailed Question Review";
+    });
+
+    // Modal Confirmation Buttons
+    dom.modalBtnCancel.addEventListener("click", hideConfirmation);
+    dom.modalBtnConfirm.addEventListener("click", () => {
+      if (typeof state.pendingAction === "function") {
+        state.pendingAction();
+      }
+      hideConfirmation();
+    });
+
+    // Close modal if user clicks on backdrop
+    dom.confirmModal.addEventListener("click", (e) => {
+      if (e.target === dom.confirmModal) {
+        hideConfirmation();
+      }
+    });
+
+    /* ==========================================================================
+       10. APPLICATION STARTUP
+       ========================================================================== */
+    document.addEventListener("DOMContentLoaded", () => {
+      renderTopicCards();
+      selectDifficulty("easy");
+    });
+  </script>
+</body>
+</html>
